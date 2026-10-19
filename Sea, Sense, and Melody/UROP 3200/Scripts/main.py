@@ -61,8 +61,6 @@ manager = ConnectionManager()
 #run every frame of the website
 async def game_loop():
 
-    #Colour slider from blue to red
-    COLORSCALE = ((0, 0, 255), (255, 0, 00))
     while True:
 
         #Get inference from camera app
@@ -77,11 +75,8 @@ async def game_loop():
             current_data = message_queue.get_nowait()
         except queue.Empty:
             pass
-        #linearly interpolate colors based on ratio in current_data[1]
-        ratio = min(current_data[1] +0.2,1.0)
-        chosen_color = tuple(int(COLORSCALE[0][i] + (COLORSCALE[1][i] - COLORSCALE[0][i]) * ratio) for i in range(3))
-        #convert to hex string
-        chosen_color = '#{:02x}{:02x}{:02x}'.format(*chosen_color)
+   
+        chosen_color = camera_data["color"]
         
         await manager.broadcast({"type": "SENSOR_DATA",
                                   "sound_energy": current_data[0], 
@@ -119,31 +114,6 @@ async def ws_endpoint(ws: WebSocket):
         manager.disconnect(ws)
     finally:
         manager.disconnect(ws)
-
-#Function to get sensor data from the json file, returns a tuple 
-# def get_sensor_data_from_json():
-#     try:
-#         with open('/sensor_box/sensor_box/sensor_data.jsonl', 'r') as f:
-#            # Read all lines into a list
-#             lines = f.readlines()
-#             if not lines:
-#                 return 0.0, 0.0
-            
-#             # Grab the very last line (the newest entry)
-#             latest_line = lines[-1].strip()
-#             if not latest_line:
-#                 return 0.0, 0.0
-                
-#             data = json.loads(latest_line)
-            
-#             # Extract brightness from 'light' and energy from 'sound'
-#             brightness = data.get('light', {}).get('brightness', 0.0)
-#             energy = data.get('sound', {}).get('energy', 0.0)
-            
-#             return brightness, energy
-#     except FileNotFoundError:
-#         return 0.0, 0.0
-
 
 #Automatically open website 
 def open_browser():
