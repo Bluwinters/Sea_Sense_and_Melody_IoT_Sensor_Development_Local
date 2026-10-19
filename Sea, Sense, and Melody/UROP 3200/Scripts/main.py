@@ -69,7 +69,7 @@ async def game_loop():
         #convert to hex string
         chosen_color = '#{:02x}{:02x}{:02x}'.format(*chosen_color)
         await manager.broadcast({"type": "SENSOR_DATA",
-                                  "sound energy": current_data[0], 
+                                  "sound_energy": current_data[0], 
                                   "brightness": current_data[1],
                                   "color": chosen_color, 
                                   "prediction": camera_data['prediction'], 

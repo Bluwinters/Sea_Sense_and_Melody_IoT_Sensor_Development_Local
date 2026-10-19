@@ -46,7 +46,8 @@
         <h3>Live AI & Sensor Data</h3>
         <p><strong>Prediction:</strong> <span id="prediction">-</span></p>
         <p><strong>Confidence:</strong> <span id="confidence">-</span></p>
-        <p><strong>Humidity:</strong> <span id="humidity">-</span></p>
+        <p><strong>Sound Energy:</strong> <span id="sound_energy">-</span></p>
+        <p><strong>Brightness:</strong> <span id="brightness">-</span></p>
         <p><strong>Color:</strong> <span id="colorValue">-</span></p>
     </div>
 <script type="importmap">{
@@ -164,7 +165,8 @@ function main() {
     
     const predEl = document.getElementById('prediction');
     const confEl = document.getElementById('confidence');
-    const humEl = document.getElementById('humidity');
+    const soundEl = document.getElementById('sound_energy');
+    const brightEl = document.getElementById('brightness');
     const colEl = document.getElementById('colorValue');
 
     // Listen for messages from the python backend on the virtual machine
@@ -172,12 +174,13 @@ function main() {
         try{
             const message = JSON.parse(event.data);
             // Check if the message has the expected structure
-            if (message.type === 'SENSOR_DATA' && typeof message.color === 'string' && typeof message.humidity == 'number' && typeof message.prediction === 'string' && typeof message.confidence === 'number') {
+            if (message.type === 'SENSOR_DATA' && typeof message.color === 'string' && typeof message.sound_energy == 'number' && typeof message.brighttness === 'number' && typeof message.prediction === 'string' && typeof message.confidence === 'number') {
                 
                 // Update the overlay text with the received data
                 predEl.textContent = message.prediction;
                 confEl.textContent = (message.confidence * 100).toFixed(1) + '%'; // formatted as percentage
-                humEl.textContent = message.humidity.toFixed(2);
+                soundEl.textContent = message.sound_energy.toFixed(2);
+                brightEl.textContent = message.brightness.toFixed(2);
                 colEl.textContent = message.color;
                 colEl.style.color = message.color; // optional: color code text to match
                 
@@ -189,7 +192,7 @@ function main() {
                 currentMesh.material.color.set(message.color);
                 currentMesh.material.emissive.set(message.color);
 
-                currentMesh.material.emissiveIntensity = message.humidity;
+                currentMesh.material.emissiveIntensity = message.brightness;
                 currentNodeIndex = (currentNodeIndex + 1) % modelparts.length; // Loop through the model parts
                 }
             }
