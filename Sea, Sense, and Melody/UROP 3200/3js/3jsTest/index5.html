@@ -337,8 +337,9 @@ function main() {
         const prediction = debugEnabled.checked
             ? debugPrediction.value
             : message.prediction;
-        // Sensor-to-RGB mapping is intentionally left open for later.
-        const color = debugEnabled.checked ? getDebugColor() : '#ffffff';
+        
+            
+        const color = debugEnabled.checked ? getDebugColor() : message.color;
 
         predEl.textContent = prediction;
         currentSoundEnergy = soundEnergy;
