@@ -161,7 +161,7 @@ def tail_sensor_log():
 
 if __name__ == "__main__":
     #Run the camera inference app in a separate thread since it has its own loop and blocking calls
-    camera_thread = threading.Thread(target=camera_app.run,args=(camera_app.queue,) daemon=True)
+    camera_thread = threading.Thread(target=camera_app.run,args=(camera_app.queue,), daemon=True)
     camera_thread.start()
 
     #Log the sensor data in a separate thread
