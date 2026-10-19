@@ -160,9 +160,11 @@ function main() {
         controls.update();
     });
 
+    //Websocket to connect this website to the python program
     const socketProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
     const socket = new WebSocket(`${socketProtocol}//${location.host}/ws/game`);
     
+    //Elements for the sensor values
     const predEl = document.getElementById('prediction');
     const confEl = document.getElementById('confidence');
     const soundEl = document.getElementById('sound_energy');
@@ -204,6 +206,8 @@ function main() {
         }
     });
  
+
+    //Automatically attempt to reconnect if the backend disconnects
     socket.addEventListener('close', () => {
         console.warn('WebSocket disconnected. Reconnecting in 2 seconds...');
         setTimeout(connectWebSocket, 2000); // Auto-reconnect after 2 seconds
