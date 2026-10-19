@@ -69,7 +69,7 @@ async def game_loop():
         await asyncio.sleep(0.05)
 
         #intialise sensor data to 0
-        current_data = (0,0)
+        current_data = (0,0,0)
         try:
             #attempt to retrieve message data from queue, returns exception if empty
             current_data = message_queue.get_nowait()
@@ -81,6 +81,7 @@ async def game_loop():
         await manager.broadcast({"type": "SENSOR_DATA",
                                   "sound_energy": current_data[0], 
                                   "brightness": current_data[1],
+                                  "touch_frequency" : current_data[2],
                                   "color": chosen_color, 
                                   "prediction": camera_data['prediction'], 
                                   "confidence": camera_data['confidence']})
@@ -147,9 +148,10 @@ def tail_sensor_log():
                 # For example, using sound energy and light brightness
                 sound_energy = data.get("sound", {}).get("energy", 0.0)
                 light_brightness = data.get("light", {}).get("brightness", 0.0)
+                touch_frequency = data.get("touch", {}).get("freq", 0.0)
                 
                 # Push a tuple into your message_queue (e.g., (humidity/sensor_val, ratio/modifier))
-                message_queue.put((sound_energy, light_brightness))
+                message_queue.put((sound_energy, light_brightness, touch_frequency))
                 
             except json.JSONDecodeError:
                 continue
